@@ -1,0 +1,107 @@
+
+# Multi-Stage Scholarship Shortlisting
+
+# Candidate data:
+# (Name, Academic Marks, Attendance %, Annual Family Income)
+
+candidates = [
+    ("Anu", 92, 95, 150000),
+    ("Ravi", 85, 90, 200000),
+    ("Priya", 88, 92, 180000),
+    ("Kiran", 76, 85, 250000),
+    ("Meena", 95, 98, 120000),
+    ("Arjun", 82, 75, 150000),
+    ("Sneha", 90, 88, 400000),
+    ("Rahul", 70, 80, 200000)
+]
+
+# Scholarship eligibility rules
+minimum_marks = 75
+minimum_attendance = 80
+maximum_income = 250000
+scholarship_quota = 4
+
+eligible_candidates = []
+rejected_candidates = []
+
+print("MULTI-STAGE SCHOLARSHIP SHORTLISTING")
+print("=" * 60)
+
+# Stage 1: Check eligibility
+for name, marks, attendance, income in candidates:
+    reasons = []
+
+    if marks < minimum_marks:
+        reasons.append("Insufficient academic marks")
+
+    if attendance < minimum_attendance:
+        reasons.append("Low attendance")
+
+    if income > maximum_income:
+        reasons.append("Income exceeds limit")
+
+    if not reasons:
+        eligible_candidates.append(
+            (name, marks, attendance, income)
+        )
+    else:
+        rejected_candidates.append((name, reasons))
+
+# Stage 2: Display eligibility results
+print("\nELIGIBILITY RESULTS")
+print("-" * 60)
+
+for name, marks, attendance, income in candidates:
+    print(
+        f"{name}: Marks={marks}, "
+        f"Attendance={attendance}%, Income=Rs.{income}"
+    )
+
+# Stage 3: Rank eligible candidates
+# Higher marks first, then higher attendance,
+# then lower family income.
+eligible_candidates.sort(
+    key=lambda candidate: (
+        -candidate[1],
+        -candidate[2],
+        candidate[3]
+    )
+)
+
+# Stage 4: Select candidates within quota
+selected = eligible_candidates[:scholarship_quota]
+waiting_list = eligible_candidates[scholarship_quota:]
+
+print("\nSELECTED SCHOLARSHIP CANDIDATES")
+print("-" * 60)
+
+for rank, (name, marks, attendance, income) in enumerate(
+    selected, start=1
+):
+    print(
+        f"Rank {rank}: {name} | Marks: {marks} | "
+        f"Attendance: {attendance}% | Income: Rs.{income}"
+    )
+
+print("\nWAITING LIST")
+print("-" * 60)
+
+if waiting_list:
+    for name, marks, attendance, income in waiting_list:
+        print(f"{name} - Marks: {marks}")
+else:
+    print("No candidates on the waiting list.")
+
+print("\nREJECTED CANDIDATES")
+print("-" * 60)
+
+for name, reasons in rejected_candidates:
+    print(f"{name}: {', '.join(reasons)}")
+
+print("\nSUMMARY")
+print("-" * 60)
+print(f"Total Applicants: {len(candidates)}")
+print(f"Eligible Applicants: {len(eligible_candidates)}")
+print(f"Scholarship Quota: {scholarship_quota}")
+print(f"Selected Candidates: {len(selected)}")
+print(f"Rejected Applicants: {len(rejected_candidates)}")

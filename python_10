@@ -1,0 +1,81 @@
+
+# Campus Festival Registration and Financial Audit
+
+# Participant registration details
+participants = [
+    (101, "Anu", 500),
+    (102, "Ravi", 500),
+    (103, "Priya", 500),
+    (102, "Ravi", 500),  # Duplicate registration
+    (104, "Kiran", 500),
+    (105, "Meena", 500)
+]
+
+# Sponsorship contributions
+sponsorships = [
+    ("ABC Company", 10000),
+    ("XYZ Company", 15000),
+    ("Local Business", 5000)
+]
+
+# Festival expenses
+expenses = [
+    ("Stage Decoration", 8000),
+    ("Food", 10000),
+    ("Sound System", 5000),
+    ("Certificates", 2000)
+]
+
+# Detect duplicate registrations
+unique_participants = {}
+duplicates = []
+
+for participant_id, name, fee in participants:
+    if participant_id in unique_participants:
+        duplicates.append((participant_id, name))
+    else:
+        unique_participants[participant_id] = (name, fee)
+
+# Calculate registration fee collection
+total_registration_fees = sum(
+    fee for name, fee in unique_participants.values()
+)
+
+# Calculate total sponsorship contributions
+total_sponsorships = sum(amount for name, amount in sponsorships)
+
+# Calculate total expenses
+total_expenses = sum(amount for name, amount in expenses)
+
+# Calculate final financial balance
+total_income = total_registration_fees + total_sponsorships
+final_balance = total_income - total_expenses
+
+# Display audit report
+print("===== CAMPUS FESTIVAL AUDIT REPORT =====")
+
+print("\nUnique Participants:", len(unique_participants))
+print("Duplicate Registrations:", len(duplicates))
+
+if duplicates:
+    print("\nDuplicate Registration Details:")
+    for participant_id, name in duplicates:
+        print("ID:", participant_id, "| Name:", name)
+
+print("\nRegistration Fee Collection: Rs.", total_registration_fees)
+print("Total Sponsorships: Rs.", total_sponsorships)
+print("Total Income: Rs.", total_income)
+
+print("\nExpense Details:")
+for item, amount in expenses:
+    print(item, ": Rs.", amount)
+
+print("Total Expenses: Rs.", total_expenses)
+print("Final Financial Balance: Rs.", final_balance)
+
+if final_balance > 0:
+    print("Status: Festival has a surplus.")
+elif final_balance < 0:
+    print("Status: Festival has a deficit.")
+else:
+    print("Status: Income and expenses are balanced.")

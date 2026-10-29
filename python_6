@@ -1,0 +1,58 @@
+
+# Campus Transport Allocation
+
+routes = {
+    "Route A": {"passengers": 120, "capacity": 50, "buses_available": 2},
+    "Route B": {"passengers": 85, "capacity": 40, "buses_available": 3},
+    "Route C": {"passengers": 200, "capacity": 60, "buses_available": 2},
+    "Route D": {"passengers": 45, "capacity": 30, "buses_available": 2}
+}
+
+total_passengers = 0
+total_buses_needed = 0
+total_buses_available = 0
+total_served = 0
+total_unserved = 0
+
+print("CAMPUS TRANSPORT ALLOCATION")
+print("=" * 60)
+
+for route, details in routes.items():
+    passengers = details["passengers"]
+    capacity = details["capacity"]
+    available = details["buses_available"]
+
+    # Calculate buses required
+    buses_needed = (passengers + capacity - 1) // capacity
+
+    # Calculate passengers who can be served
+    service_capacity = available * capacity
+    served = min(passengers, service_capacity)
+    unserved = passengers - served
+
+    print(f"\n{route}")
+    print(f"Passenger Demand: {passengers}")
+    print(f"Bus Capacity: {capacity}")
+    print(f"Buses Required: {buses_needed}")
+    print(f"Buses Available: {available}")
+    print(f"Passengers Served: {served}")
+    print(f"Unserved Passengers: {unserved}")
+
+    if unserved == 0:
+        print("Status: All passengers served")
+    else:
+        print("Status: Additional buses required")
+
+    total_passengers += passengers
+    total_buses_needed += buses_needed
+    total_buses_available += available
+    total_served += served
+    total_unserved += unserved
+
+print("\n" + "=" * 60)
+print("OVERALL TRANSPORT SUMMARY")
+print(f"Total Passenger Demand: {total_passengers}")
+print(f"Total Buses Required: {total_buses_needed}")
+print(f"Total Buses Available: {total_buses_available}")
+print(f"Total Passengers Served: {total_served}")
+print(f"Total Unserved Passengers: {total_unserved}")

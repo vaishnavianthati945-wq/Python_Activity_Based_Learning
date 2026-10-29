@@ -1,0 +1,82 @@
+
+# Hackathon Team Formation and Ranking
+
+# Student data: name, team, round 1 score, round 2 score, round 3 score
+students = [
+    ("Asha", "Team Alpha", 80, 85, 90),
+    ("Ravi", "Team Alpha", 75, 80, 85),
+    ("Priya", "Team Alpha", 90, 88, 92),
+
+    ("Kiran", "Team Beta", 85, 90, 95),
+    ("Meena", "Team Beta", 80, 85, 90),
+    ("Arjun", "Team Beta", 80, 85, 90),
+
+    ("Sneha", "Team Gamma", 90, 90, 90),
+    ("Rahul", "Team Gamma", 85, 85, 85)
+]
+
+MIN_SIZE = 3
+MAX_SIZE = 4
+
+teams = {}
+
+# Group students by team
+for name, team, r1, r2, r3 in students:
+    teams.setdefault(team, []).append({
+        "name": name,
+        "scores": (r1, r2, r3)
+    })
+
+print("HACKATHON TEAM ANALYSIS")
+print("=" * 55)
+
+valid_teams = []
+
+# Validate teams and calculate scores
+for team_name, members in teams.items():
+    print(f"\n{team_name}")
+    print(f"Team Size: {len(members)}")
+
+    if not MIN_SIZE <= len(members) <= MAX_SIZE:
+        print("Status: INVALID TEAM SIZE")
+        continue
+
+    round1 = sum(m["scores"][0] for m in members)
+    round2 = sum(m["scores"][1] for m in members)
+    round3 = sum(m["scores"][2] for m in members)
+    total = round1 + round2 + round3
+
+    print(f"Round 1 Total: {round1}")
+    print(f"Round 2 Total: {round2}")
+    print(f"Round 3 Total: {round3}")
+    print(f"Overall Score: {total}")
+    print("Status: VALID")
+
+    valid_teams.append({
+        "name": team_name,
+        "r1": round1,
+        "r2": round2,
+        "r3": round3,
+        "total": total
+    })
+
+# Ranking rules:
+# 1. Higher overall score
+# 2. Higher Round 3 score
+# 3. Higher Round 1 score
+valid_teams.sort(
+    key=lambda t: (t["total"], t["r3"], t["r1"]),
+    reverse=True
+)
+
+print("\n" + "=" * 55)
+print("FINAL TEAM RANKINGS")
+print("=" * 55)
+
+for rank, team in enumerate(valid_teams, start=1):
+    print(
+        f"Rank {rank}: {team['name']} - "
+        f"Total: {team['total']}, "
+        f"Round 3: {team['r3']}, "
+        f"Round 1: {team['r1']}"
+    )

@@ -1,0 +1,74 @@
+
+# Multi-Event Sports Scheduling and Scoring
+
+# Event tuple: (event_name, day, start_time, end_time)
+events = [
+    ("Cricket", "Monday", 9, 11),
+    ("Football", "Monday", 10, 12),
+    ("Basketball", "Tuesday", 9, 10),
+    ("Volleyball", "Monday", 12, 13)
+]
+
+# Team scores: (team_name, event_name, points)
+scores = [
+    ("Team A", "Cricket", 10),
+    ("Team B", "Cricket", 8),
+    ("Team C", "Cricket", 6),
+    ("Team A", "Football", 6),
+    ("Team B", "Football", 10),
+    ("Team C", "Football", 8),
+    ("Team A", "Basketball", 8),
+    ("Team B", "Basketball", 6),
+    ("Team C", "Basketball", 10),
+    ("Team A", "Volleyball", 10),
+    ("Team B", "Volleyball", 6),
+    ("Team C", "Volleyball", 8)
+]
+
+# 1. Display event schedule
+print("SPORTS EVENT SCHEDULE")
+print("-" * 55)
+
+for name, day, start, end in events:
+    print(f"{name}: {day}, {start}:00-{end}:00")
+
+# 2. Detect scheduling conflicts
+print("\nSCHEDULING CONFLICTS")
+print("-" * 55)
+
+conflicts_found = False
+
+for i in range(len(events)):
+    for j in range(i + 1, len(events)):
+        e1 = events[i]
+        e2 = events[j]
+
+        # Events conflict if they overlap on the same day
+        if e1[1] == e2[1] and e1[2] < e2[3] and e2[2] < e1[3]:
+            print(f"{e1[0]} conflicts with {e2[0]}")
+            conflicts_found = True
+
+if not conflicts_found:
+    print("No scheduling conflicts found.")
+
+# 3. Aggregate points for each team
+team_totals = {}
+
+for team, event, points in scores:
+    team_totals[team] = team_totals.get(team, 0) + points
+
+# 4. Generate final rankings
+rankings = sorted(
+    team_totals.items(),
+    key=lambda item: item[1],
+    reverse=True
+)
+
+print("\nFINAL TEAM RANKINGS")
+print("-" * 55)
+
+for rank, (team, points) in enumerate(rankings, start=1):
+    print(f"Rank {rank}: {team} - {points} points")
+
+print("\nHighest Scoring Team:", rankings[0][0])
+print("Total Points:", rankings[0][1])

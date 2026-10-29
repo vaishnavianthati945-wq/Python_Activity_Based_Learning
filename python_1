@@ -1,0 +1,56 @@
+# Multi-Currency Travel Budget Analysis
+
+# Exchange rates: 1 unit of foreign currency in INR
+exchange_rates = {
+    "USD": 85.00,
+    "EUR": 92.00,
+    "GBP": 110.00
+}
+
+budget = 50000
+conversion_fee_rate = 2  # 2% conversion fee
+
+# Travel expenses: category, amount, currency
+expenses = [
+    ("Hotel", 200, "USD"),
+    ("Food", 100, "EUR"),
+    ("Transport", 50, "GBP"),
+    ("Shopping", 150, "USD")
+]
+
+total_spending = 0
+category_totals = {}
+
+print("MULTI-CURRENCY TRAVEL BUDGET ANALYSIS")
+print("-" * 60)
+
+for category, amount, currency in expenses:
+    rate = exchange_rates[currency]
+
+    converted_amount = amount * rate
+    fee = converted_amount * conversion_fee_rate / 100
+    final_amount = converted_amount + fee
+
+    total_spending += final_amount
+    category_totals[category] = final_amount
+
+    print(f"Category: {category}")
+    print(f"Original Amount: {amount} {currency}")
+    print(f"Converted Amount: Rs. {converted_amount:.2f}")
+    print(f"Conversion Fee: Rs. {fee:.2f}")
+    print(f"Final Expense: Rs. {final_amount:.2f}")
+    print("-" * 60)
+
+largest_category = max(category_totals, key=category_totals.get)
+remaining_budget = budget - total_spending
+
+print(f"Planned Budget: Rs. {budget:.2f}")
+print(f"Total Spending: Rs. {total_spending:.2f}")
+
+if remaining_budget >= 0:
+    print(f"Remaining Budget: Rs. {remaining_budget:.2f}")
+else:
+    print(f"Budget Exceeded By: Rs. {-remaining_budget:.2f}")
+
+print(f"Largest Expense Category: {largest_category}")
+print(f"Largest Expense: Rs. {category_totals[largest_category]:.2f}")

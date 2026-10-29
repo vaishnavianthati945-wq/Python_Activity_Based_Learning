@@ -1,0 +1,79 @@
+
+# Student Timetable Conflict Detection
+
+# Schedule format: (course, day, start_time, end_time, room)
+# Times are represented as minutes after midnight.
+
+courses = [
+    ("Python", "Monday", 540, 600, "R101"),
+    ("Mathematics", "Monday", 570, 630, "R102"),
+    ("Physics", "Tuesday", 600, 660, "R103"),
+    ("English", "Monday", 630, 690, "R101")
+]
+
+# Rooms unavailable during these periods
+unavailable_rooms = [
+    ("R101", "Monday", 630, 690),
+    ("R103", "Tuesday", 600, 660)
+]
+
+# Convert time in minutes to HH:MM format
+def format_time(minutes):
+    return f"{minutes // 60:02d}:{minutes % 60:02d}"
+
+# Detect overlapping schedules for the same student
+conflicts = []
+
+for i in range(len(courses)):
+    for j in range(i + 1, len(courses)):
+        c1 = courses[i]
+        c2 = courses[j]
+
+        if c1[1] == c2[1]:
+            if c1[2] < c2[3] and c2[2] < c1[3]:
+                conflicts.append((c1[0], c2[0]))
+
+# Check room availability
+room_conflicts = []
+
+for course in courses:
+    for room in unavailable_rooms:
+        if course[4] == room[0] and course[1] == room[1]:
+            if course[2] < room[3] and room[2] < course[3]:
+                room_conflicts.append(course[0])
+
+# Display timetable
+print("STUDENT TIMETABLE")
+print("-" * 60)
+
+for course in courses:
+    print(
+        f"{course[0]} | {course[1]} | "
+        f"{format_time(course[2])}-{format_time(course[3])} "
+        f"| Room: {course[4]}"
+    )
+
+print("-" * 60)
+
+# Display course conflicts
+print("\nSCHEDULE CONFLICTS:")
+if conflicts:
+    for c1, c2 in conflicts:
+        print(f"{c1} overlaps with {c2}")
+else:
+    print("No overlapping courses.")
+
+# Display unavailable room conflicts
+print("\nROOM AVAILABILITY:")
+if room_conflicts:
+    for course in room_conflicts:
+        print(f"{course}: Assigned room is unavailable.")
+else:
+    print("All rooms are available.")
+
+# Validate the proposed timetable
+print("\nTIMETABLE VALIDATION:")
+if not conflicts and not room_conflicts:
+    print("Valid timetable.")
+else:
+    print("Invalid timetable. Please resolve the conflicts.")

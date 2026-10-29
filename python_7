@@ -1,0 +1,95 @@
+
+# Nested List Examination Seating Validation
+
+# None represents an empty seat
+# "RESERVED" represents a reserved position
+
+seating = [
+    ["R101", "R102", "RESERVED"],
+    ["R103", "R102", None],
+    ["R105", "INVALID", "R106"]
+]
+
+valid_roll_numbers = {
+    "R101", "R102", "R103", "R104", "R105", "R106"
+}
+
+reserved_positions = [(0, 2)]
+seen_roll_numbers = set()
+duplicates = []
+empty_seats = []
+invalid_allocations = []
+reserved_errors = []
+
+# Validate every position in the seating matrix
+for i, row in enumerate(seating):
+    for j, seat in enumerate(row):
+        position = (i, j)
+
+        if position in reserved_positions:
+            if seat != "RESERVED":
+                reserved_errors.append(position)
+            continue
+
+        if seat == "RESERVED":
+            reserved_errors.append(position)
+            continue
+
+        if seat is None:
+            empty_seats.append(position)
+            continue
+
+        if seat not in valid_roll_numbers:
+            invalid_allocations.append((seat, position))
+            continue
+
+        if seat in seen_roll_numbers:
+            duplicates.append((seat, position))
+        else:
+            seen_roll_numbers.add(seat)
+
+# Display seating matrix
+print("EXAMINATION SEATING MATRIX")
+print("-" * 40)
+
+for row in seating:
+    print(row)
+
+# Display validation results
+print("\nVALIDATION REPORT")
+print("-" * 40)
+
+print("\n1. Duplicate Roll Numbers:")
+if duplicates:
+    for roll, pos in duplicates:
+        print(f"{roll} duplicated at Row {pos[0]+1}, Seat {pos[1]+1}")
+else:
+    print("No duplicates found.")
+
+print("\n2. Reserved Position Errors:")
+if reserved_errors:
+    for pos in reserved_errors:
+        print(f"Error at Row {pos[0]+1}, Seat {pos[1]+1}")
+else:
+    print("Reserved positions are correct.")
+
+print("\n3. Empty Seats:")
+if empty_seats:
+    for pos in empty_seats:
+        print(f"Row {pos[0]+1}, Seat {pos[1]+1}")
+else:
+    print("No empty seats.")
+
+print("\n4. Invalid Student Allocations:")
+if invalid_allocations:
+    for roll, pos in invalid_allocations:
+        print(f"{roll} at Row {pos[0]+1}, Seat {pos[1]+1}")
+else:
+    print("No invalid allocations.")
+
+# Final validation
+if not (duplicates or empty_seats or
+        invalid_allocations or reserved_errors):
+    print("\nFinal Status: VALID SEATING MATRIX")
+else:
+    print("\nFinal Status: INVALID SEATING MATRIX")

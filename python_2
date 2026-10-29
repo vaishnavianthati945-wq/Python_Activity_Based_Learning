@@ -1,0 +1,78 @@
+
+# Examination Result and Grace-Mark Validation
+
+subjects = {
+    "Mathematics":  {"marks": 34, "pass_mark": 35, "max_mark": 100},
+    "Physics":      {"marks": 68, "pass_mark": 35, "max_mark": 100},
+    "Chemistry":    {"marks": 75, "pass_mark": 35, "max_mark": 100},
+    "Programming":  {"marks": 32, "pass_mark": 35, "max_mark": 100},
+    "English":      {"marks": 80, "pass_mark": 35, "max_mark": 100}
+}
+
+grace_limit = 3
+grace_used = 0
+total_marks = 0
+all_passed = True
+
+print("EXAMINATION RESULT")
+print("-" * 65)
+
+for subject, details in subjects.items():
+    marks = details["marks"]
+    pass_mark = details["pass_mark"]
+    max_mark = details["max_mark"]
+
+    # Validate marks
+    if marks < 0 or marks > max_mark:
+        print(f"{subject}: Invalid marks")
+        all_passed = False
+        continue
+
+    grace = 0
+
+    # Apply grace marks only if the shortage is within the limit
+    if marks < pass_mark:
+        shortage = pass_mark - marks
+        available_grace = grace_limit - grace_used
+
+        if shortage <= available_grace:
+            grace = shortage
+            grace_used += grace
+            marks = min(marks + grace, max_mark)
+
+    total_marks += marks
+
+    if marks >= pass_mark:
+        status = "PASS"
+    else:
+        status = "FAIL"
+        all_passed = False
+
+    print(f"{subject}: {marks}/{max_mark}, "
+          f"Grace: {grace}, Result: {status}")
+
+print("-" * 65)
+
+number_of_subjects = len(subjects)
+maximum_total = sum(s["max_mark"] for s in subjects.values())
+percentage = (total_marks / maximum_total) * 100
+
+print(f"Total Marks: {total_marks}/{maximum_total}")
+print(f"Percentage: {percentage:.2f}%")
+print(f"Grace Marks Used: {grace_used}/{grace_limit}")
+
+if all_passed:
+    if percentage >= 75:
+        classification = "Distinction"
+    elif percentage >= 60:
+        classification = "First Class"
+    elif percentage >= 50:
+        classification = "Second Class"
+    else:
+        classification = "Pass Class"
+
+    print("Final Result: PASS")
+    print(f"Classification: {classification}")
+else:
+    print("Final Result: FAIL")
+    print("Classification: Not Applicable")

@@ -1,0 +1,73 @@
+
+# Multi-Branch Sales Matrix Comparison
+
+products = ["Laptop", "Mobile", "Tablet"]
+
+branches = {
+    "Branch A": [
+        [10, 12, 8],    # Laptop sales over 3 days
+        [15, 18, 20],   # Mobile sales
+        [5, 7, 6]       # Tablet sales
+    ],
+    "Branch B": [
+        [14, 10, 12],
+        [12, 16, 14],
+        [8, 9, 10]
+    ],
+    "Branch C": [
+        [8, 9, 11],
+        [20, 18, 22],
+        [6, 5, 7]
+    ]
+}
+
+branch_totals = {}
+product_totals = {product: 0 for product in products}
+
+print("MULTI-BRANCH SALES ANALYSIS")
+print("=" * 45)
+
+# Calculate product totals and branch totals
+for branch, sales_matrix in branches.items():
+    print(f"\n{branch}:")
+
+    total_sales = 0
+
+    for i, product in enumerate(products):
+        product_sales = sum(sales_matrix[i])
+        total_sales += product_sales
+        product_totals[product] += product_sales
+
+        print(f"{product}: {product_sales} units")
+
+    branch_totals[branch] = total_sales
+
+    # Identify best-performing product in each branch
+    best_index = max(
+        range(len(products)),
+        key=lambda i: sum(sales_matrix[i])
+    )
+
+    print(f"Total Branch Sales: {total_sales} units")
+    print(f"Best Product: {products[best_index]}")
+
+# Compare branches
+print("\n" + "=" * 45)
+print("BRANCH COMPARISON")
+
+for branch, total in branch_totals.items():
+    print(f"{branch}: {total} units")
+
+best_branch = max(branch_totals, key=branch_totals.get)
+
+print(f"Best Performing Branch: {best_branch}")
+
+# Overall product totals
+print("\nOVERALL PRODUCT TOTALS")
+
+for product, total in product_totals.items():
+    print(f"{product}: {total} units")
+
+best_product = max(product_totals, key=product_totals.get)
+print(f"Best Selling Product Overall: {best_product}")
+
